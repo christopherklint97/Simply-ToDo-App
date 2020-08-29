@@ -8,15 +8,15 @@ let arrayList = [];
 
 // Loads the list of to-do items from the localStorage when the page loads
 window.addEventListener('load', () => {
+    localStorage.setItem('list');
     arrayList = JSON.parse(localStorage.getItem('list'));
 
-    if (arrayList.length > 1) {
+    if (arrayList) {
         for (let arrayItem of arrayList) {
 
             const listItem = document.createElement('li');
             listItem.innerText = arrayItem;
             list.appendChild(listItem);
-
         }
     }
 
