@@ -6,13 +6,10 @@ let arrayList = [];
 
 // Event listeners for to-do list functionality
 
-// Loads the list of to-do items from the localStorage when the DOM loads
-document.addEventListener('load', () => {
+// Loads the list of to-do items from the localStorage when the pages loads
+window.addEventListener('load', () => {
 
     if (localStorage.list) {
-        localStorage.setItem('list', '');
-
-    } else {
         arrayList = JSON.parse(localStorage.getItem('list'));
 
         for (let arrayItem of arrayList) {
