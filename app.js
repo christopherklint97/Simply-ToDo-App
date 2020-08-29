@@ -10,13 +10,16 @@ let arrayList = [];
 window.addEventListener('load', () => {
     arrayList = JSON.parse(localStorage.getItem('list'));
 
-    for (let arrayItem of arrayList) {
+    if (arrayList.length > 1) {
+        for (let arrayItem of arrayList) {
 
-        const listItem = document.createElement('li');
-        listItem.innerText = arrayItem;
-        list.appendChild(listItem);
+            const listItem = document.createElement('li');
+            listItem.innerText = arrayItem;
+            list.appendChild(listItem);
 
+        }
     }
+
 });
 
 // Adds an item to the list with user hits enter
@@ -35,26 +38,27 @@ form.addEventListener('submit', (e) => {
     input.value = '';
 });
 
-// Creates a box around the list item when hovered over, handles also clicking and double-clicking events
+// Creates a box around the list item when hovered over, 
 list.addEventListener('mouseover', (e) => {
 
     if (e.target.tagName === 'LI') {
 
         const item = e.target;
-        item.className = 'hover-over';
-
-        item.addEventListener('click', (e) => {
-            const item = e.target;
-            item.classList.toggle('clicked');
-
-            item.addEventListener('dblclick', (e) => {
-                const item = e.target;
-                arrayList.pop(item.remove());
-
-                localStorage.setItem('list', JSON.stringify(arrayList));
-            })
-        })
+        item.classList.toggle('hover-over');
     }
+})
+
+// Handles also clicking and double-clicking events
+list.addEventListener('click', (e) => {
+    const item = e.target;
+    item.classList.toggle('clicked');
+
+    item.addEventListener('dblclick', (e) => {
+        const item = e.target;
+        arrayList.pop(item.remove());
+
+        localStorage.setItem('list', JSON.stringify(arrayList));
+    })
 })
 
 // Takes away the box and icons around the list item when the user hovers away
@@ -62,6 +66,6 @@ list.addEventListener('mouseout', (e) => {
 
     if (e.target.tagName === 'LI') {
         const item = e.target;
-        item.className = '';
+        item.classList.remove('hover-over');
     }
 })
