@@ -6,12 +6,15 @@ let arrayList = [];
 
 // Event listeners for to-do list functionality
 
-// Loads the list of to-do items from the localStorage when the page loads
-window.addEventListener('load', () => {
-    localStorage.setItem('list', '');
-    arrayList = JSON.parse(localStorage.getItem('list'));
+// Loads the list of to-do items from the localStorage when the DOM loads
+document.addEventListener('load', () => {
 
-    if (arrayList) {
+    if (localStorage.list) {
+        localStorage.setItem('list', '');
+
+    } else {
+        arrayList = JSON.parse(localStorage.getItem('list'));
+
         for (let arrayItem of arrayList) {
 
             const listItem = document.createElement('li');
@@ -19,7 +22,6 @@ window.addEventListener('load', () => {
             list.appendChild(listItem);
         }
     }
-
 });
 
 // Adds an item to the list with user hits enter
@@ -33,7 +35,6 @@ form.addEventListener('submit', (e) => {
     arrayList.push(item.innerText);
 
     localStorage.setItem('list', JSON.stringify(arrayList));
-
 
     input.value = '';
 });
