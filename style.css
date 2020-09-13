@@ -79,14 +79,14 @@ li {
     transition: all .3s;
 }
 
-.hover-over {
+li:hover {
     border: solid var(--accent-color);
     border-radius: 15px;
     transition: border, padding .2s;
     padding: 10px;
 }
 
-.clicked {
+.completed {
     text-decoration: line-through;
     color: rgba(128, 128, 128, 0.541);
 }

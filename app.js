@@ -1,69 +1,68 @@
-// Variable declarations for the DOM
-const form = document.querySelector('form');
-const list = document.querySelector('ul');
-const input = document.querySelector(`input[type='text']`);
-let arrayList = [];
+(function () {
+    // Variable declarations for the DOM
+    const form = document.querySelector('form');
+    const list = document.querySelector('ul');
+    const input = document.querySelector(`input[type='text']`);
+    let obj = {};
 
-// Event listeners for to-do list functionality
+    // Event listeners for to-do list functionality
 
-// Loads the list of to-do items from the localStorage when the pages loads
-window.addEventListener('load', () => {
+    // Loads the list of to-do items from the localStorage when the pages loads
+    window.addEventListener('load', () => {
 
-    if (localStorage.list) {
-        arrayList = JSON.parse(localStorage.getItem('list'));
+        if (localStorage.list) {
+            obj = JSON.parse(localStorage.getItem('list'));
 
-        for (let arrayItem of arrayList) {
+            for (let key in obj) {
 
-            const listItem = document.createElement('li');
-            listItem.innerText = arrayItem;
-            list.appendChild(listItem);
+                const listItem = document.createElement('li');
+                listItem.innerText = key;
+                listItem.classList.add(obj[key]);
+                list.appendChild(listItem);
+            }
         }
-    }
-});
+    });
 
-// Adds an item to the list with user hits enter
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
+    // Adds an item to the list when user hits enter
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    const item = document.createElement('li');
+        const item = document.createElement('li');
 
-    item.innerText = input.value;
-    list.appendChild(item);
-    arrayList.push(item.innerText);
+        item.innerText = input.value;
 
-    localStorage.setItem('list', JSON.stringify(arrayList));
+        if (item.innerText.trim()) {
+            list.appendChild(item);
+            let key = item.innerText;
+            obj[key] = 'open';
+            localStorage.setItem('list', JSON.stringify(obj));
+        }
 
-    input.value = '';
-});
+        input.value = '';
+    });
 
-// Creates a box around the list item when hovered over, 
-list.addEventListener('mouseover', (e) => {
-
-    if (e.target.tagName === 'LI') {
-
+    // Handles also clicking and double-clicking events
+    list.addEventListener('click', (e) => {
         const item = e.target;
-        item.classList.toggle('hover-over');
-    }
-})
+        let key = item.innerText;
 
-// Handles also clicking and double-clicking events
-list.addEventListener('click', (e) => {
-    const item = e.target;
-    item.classList.toggle('clicked');
+        if (item.classList.contains('completed')) {
+            item.classList.remove('completed');
+            obj[key] = 'open';
+        } else {
+            item.classList.add('completed');
+            obj[key] = 'completed';
+        }
 
-    item.addEventListener('dblclick', (e) => {
-        const item = e.target;
-        arrayList.pop(item.remove());
+        localStorage.setItem('list', JSON.stringify(obj));
 
-        localStorage.setItem('list', JSON.stringify(arrayList));
-    })
-})
+        item.addEventListener('dblclick', (e) => {
+            const item = e.target;
+            let key = item.innerText;
+            delete obj[key];
+            item.remove();
 
-// Takes away the box and icons around the list item when the user hovers away
-list.addEventListener('mouseout', (e) => {
-
-    if (e.target.tagName === 'LI') {
-        const item = e.target;
-        item.classList.remove('hover-over');
-    }
-})
+            localStorage.setItem('list', JSON.stringify(obj));
+        });
+    });
+})();
